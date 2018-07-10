@@ -1,0 +1,8 @@
+- set_fact:
+    core_docker_image: registry.gitlab.com/swarmfund/core
+    docker_network: core-network
+    config_volume: core-config
+    data_volume: core-data
+    pg_volume: core-pg-data
+
+    core_config_path: /config/config.ini

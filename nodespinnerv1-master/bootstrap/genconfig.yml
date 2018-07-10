@@ -1,0 +1,29 @@
+- hosts: localhost
+  connection: local
+  tasks:
+
+  - include_tasks: vars.yml
+
+  - name: include environment config
+    include_vars:
+      file: /env.yml
+      name: config_env
+
+  - name: generate node seed
+    command: "genkp --generate"
+    register: node_seed
+
+  - name: get public key
+    command: "genkp --public {{ node_seed.stdout }}"
+    register: node_public
+
+  - set_fact:
+      node_seed: "{{ node_seed.stdout }}"
+      node_public: "{{ node_public.stdout }}"
+
+  - name: generate config
+    template:
+      src: config.template
+      dest: "{{ core_config_path }}"
+      backup: true
+      force: true

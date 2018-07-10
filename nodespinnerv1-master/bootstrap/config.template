@@ -1,0 +1,84 @@
+{% set peer_port=8090 %}
+
+HTTP_PORT=8080
+PUBLIC_HTTP_PORT=true
+RUN_STANDALONE=false
+PEER_PORT={{ peer_port }}
+NETWORK_PASSPHRASE="{{ config_env.passphrase }}"
+CATCHUP_COMPLETE=true
+
+TX_INTERNAL_ERROR=[
+{% for hash in config_env.get('tx_internal_error', []) %}
+	"{{ hash }}",
+{% endfor %}
+]
+
+MASTER_ACCOUNT_ID="{{ config_env.master }}"
+
+NODE_SEED="{{ node_seed }}"
+NODE_IS_VALIDATOR=true
+
+NODE_NAMES=[
+	# extra nodes
+{% for node in config_env.get('extra_node_names', []) %}
+	"{{ node }}",
+{% endfor %}
+	# env nodes
+{% for node, values in config_env.get('nodes', {}).items() %}
+	"{{ values.public }} {{ node }}",
+{% endfor %}
+]
+
+TMP_DIR_PATH="/data/tmp"
+BUCKET_DIR_PATH="/data/buckets"
+
+BTC_ADDRESS_ROOT="{{ config_env.btc_address }}"
+ETH_ADDRESS_ROOT="{{ config_env.eth_address }}"
+
+BASE_EXCHANGE_NAME="{{ config_env.base_exchange_name }}"
+TX_EXPIRATION_PERIOD=604800
+
+DESIRED_MAX_TX_PER_LEDGER=500
+
+DATABASE="postgresql://dbname=core user=core password=core host=core_db port=5432"
+
+COMMANDS=["ll?level=info"]
+
+KNOWN_PEERS=[
+	# extra peers
+{% for peer in config_env.get('extra_peers', []) %}
+	"{{ peer }}",
+{% endfor %}
+	# env peers
+{% for node in config_env.get('nodes', {}).values() %}
+	"{{ node.peer }}",
+{% endfor %}
+]
+
+PREFERRED_PEERS_ONLY=false
+
+{% if config_env.unsafe_quorum %}
+FAILURE_SAFETY=0
+UNSAFE_QUORUM=true
+{% else %}
+FAILURE_SAFETY=1
+UNSAFE_QUORUM=false
+{% endif %}
+
+[QUORUM_SET]
+THRESHOLD_PERCENT=51
+VALIDATORS=[
+{% for node in config_env.get('nodes', {}) %}
+    "${{ node }}",
+{% endfor %}
+]
+
+[HISTORY.vs]
+get="cp /data/history/{0} {1}"
+put="cp {0} /data/history/{1}"
+mkdir="mkdir -p /data/history/{0}"
+
+{% for node, values in config_env.get('nodes', {}).items() %}
+[HISTORY.{{ node }}]
+get="aws s3 --region={{ values.history.region }} cp s3://{{ values.history.bucket }}/{0} {1}"
+{% endfor %}

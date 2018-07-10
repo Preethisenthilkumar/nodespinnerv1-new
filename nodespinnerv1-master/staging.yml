@@ -1,0 +1,21 @@
+unsafe_quorum: true
+base_exchange_name: 'Swarm'
+passphrase: "SUN Staging Network ; December 2017"
+master: GD7AHJHCDSQI6LVMEJEE2FTNCA2LJQZ4R64GUI3PWANSVEO4GEOWB636
+btc_address: tpubDAD2WiJMQa29eFFMGPmMSwCv64e76u8sRwj9Msn6tLmyUM3ckG9quXqHw9f7tQR1JL8mTrmtYGX9Rb2KN6FVH4pXJEkk9V5w1Qj1yXF9QgP
+eth_address: xpub6BZoAKnpsQZ6eciGTFAc7AwoR5oiRqebCsTfhq1pGNX1pigj295riVsP1EkGs2xdRLGpTzStUyRN39fcHbNXFheGBb8KFmyhcoHQG5U1Cyp
+nodes:
+  stage_alpha:
+    peer: 10.0.0.1:8090
+    seed: SA5NWNF6L2C4SMA4WR3W2RBBDOUT777Z3MTRLCEKR6LP25F2GLJCJCEX
+    public: GARYGOHMMIFXYJO462SL52YY4JNBOWW25I54JDWZXAXN7W2A3PR3WUAP
+    history:
+      region: eu-central-1
+      bucket: stage-history-alpha
+  stage_bravo:
+    peer: 10.0.0.2:8090
+    seed: SAMX7UE7CJIJ3VZD37AUZCPWUUDTHJ3B55IIP2QZCL2UWGZQB44OWGTW
+    public: GBY55MMAFM56S375YWVMSY3FDA65UOKOH3AB7SULNCZNTVRIVVWAP7D2
+    history:
+      region: eu-central-1
+      bucket: stage-history-bravo
